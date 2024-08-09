@@ -4,11 +4,16 @@ import { CreateRoom } from './pages/create-room'
 import { Room } from './pages/room'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClient } from './lib/react-query'
+import { ListRooms } from './pages/list-rooms'
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <CreateRoom />
+  },
+  {
+    path: '/rooms',
+    element: <ListRooms />
   },
   {
     path: '/rooms/:roomId',
