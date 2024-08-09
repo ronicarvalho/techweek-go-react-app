@@ -1,21 +1,33 @@
 import { ArrowRight } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
+import { createRoom } from '../http/create-room'
+import logo from '../assets/logo.png'
 
 export function CreateRoom() {
 
     const navigate = useNavigate()
 
-    function handleCreateRoom(data: FormData) {
+    async function handleCreateRoom(data: FormData) {
         const theme = data.get('theme')?.toString()
-        console.log(theme)
-        navigate('/room/abc')
+
+        if (!theme) {
+            return
+        }
+
+        try {
+            const { roomId } = await createRoom({ theme })
+            navigate(`/rooms/${roomId}`)
+        } catch {
+            toast.error('Falha ao criar sala!')
+        }
     }
 
 
     return (
         <main className="h-screen flex items-center justify-center px-4">
             <div className="max-w-[450px] flex flex-col gap-6">
-                {/* <img src={amaLogo} className="h-10" /> */}
+                <img src={logo} className="h-10 w-10 flex self-center" alt="encoders" />
                 <p className="leading-relaxed text-zinc-300 text-center">
                     Crie uma sala pública de AMA (Ask me anything) e priorize as perguntas mais importantes para a comunidade.
                 </p>
@@ -27,6 +39,7 @@ export function CreateRoom() {
                         name="theme" 
                         placeholder="Nome da sala" 
                         autoComplete='off'
+                        required
                         className='flex-1 text-sm bg-transparent mx-2 outline-none text-zinc-100 placeholder:text-zinc-500' 
                     />
                     <button 
